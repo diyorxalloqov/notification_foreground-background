@@ -9,9 +9,16 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+
+  Future<bool?> getPermission() async {
+    return await notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
+  }
+
   // init notifications
   Future<void> initNotification() async {
-    // Initialize time zones
     tz.initializeTimeZones();
 
     // Request notification permission
@@ -40,7 +47,7 @@ class NotificationService {
       iOS: initializationSettingsIOS,
     );
 
-    // Initialize 
+    // Initialize
     await notificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse:
@@ -73,7 +80,6 @@ class NotificationService {
       await notificationDetails(),
     );
   }
-
 
   Future<void> scheduleNotification({
     int id = 0,

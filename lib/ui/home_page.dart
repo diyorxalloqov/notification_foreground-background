@@ -12,6 +12,18 @@ class _MyHomePageState extends State<HomePage> {
   TimeOfDay selectedTime = TimeOfDay.now();
   DateTime now = DateTime.now();
 
+  Future sendNotification(int minute) async {
+    // if () {
+
+    // } else {
+
+    // }
+    
+    await Future.delayed(Duration(minutes: minute)).then((value) =>
+        NotificationService()
+            .showNotification(body: 'hello', id: 0, title: 'salom'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +39,12 @@ class _MyHomePageState extends State<HomePage> {
                 TimeOfDay? pickedTime = await showTimePicker(
                   context: context,
                   initialTime: selectedTime,
-                  
                 );
                 if (pickedTime != null) {
                   setState(() {
                     selectedTime = pickedTime;
                   });
+
                   DateTime scheduledDateTime = DateTime(
                     now.year,
                     now.month,
@@ -40,16 +52,18 @@ class _MyHomePageState extends State<HomePage> {
                     pickedTime.hour,
                     pickedTime.minute,
                   );
-
-                  // await NotificationService().scheduledNotification(
-                  //       hour: selectedTime.hour, minute: selectedTime.minute);
-                  await NotificationService().scheduleNotification(
-                      scheduledTime: scheduledDateTime,
-                      body: 'notification',
-                      title: 'hello',
-                      id: 0);
+                  print(scheduledDateTime.minute - DateTime.now().minute);
+                  sendNotification(
+                      scheduledDateTime.minute - DateTime.now().minute);
 
                   print('Selected Time: $selectedTime');
+                  print('Scheduled Time: $scheduledDateTime');
+
+                  await NotificationService().showNotification(
+                    title: 'Timer is setting up',
+                    body: 'Timer',
+                  );
+            
                 }
               },
               child: const Center(
